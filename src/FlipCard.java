@@ -1,63 +1,40 @@
 import java.awt.Dimension;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
 import javax.swing.JButton;
-import javax.swing.JOptionPane;
 
 class FlipCard extends JButton {
     private int cardValue;
     private boolean flipped = false;
+    private boolean matched = false;
 
     public FlipCard(int cardValue) {
         this.cardValue = cardValue;
-        // Adjust the size as needed
-        setPreferredSize(new Dimension(100, 100)); 
-        // Initially, the card has no text
-        setText(""); // Initially, the card has no text
+        setPreferredSize(new Dimension(100, 100));
+        setText("");
+    }
 
-        // Add a click listener to flip the card
-        addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                // Toggle the card's state (front/back)
-                flipped = !flipped;
-                if (flipped) {
-                    setText(String.valueOf(cardValue)); // Display the card's value when flipped
-                } else {
-                    setText(""); // Display no text when not flipped
-                }
-                repaint();
-            }
-        });
+    public int getValue() {
+        return cardValue;
     }
-    
-    public int getValue()
-    {
-    	return cardValue;
+
+    public boolean isFlipped() {
+        return flipped;
     }
-    public void flip()
-    {
-    	flipped = !flipped;
+
+    public boolean isMatched() {
+        return matched;
+    }
+
+    public void flip() {
+        flipped = !flipped;
         if (flipped) {
-            setText(String.valueOf(cardValue)); // Display the card's value when flipped
+            setText(String.valueOf(cardValue));
         } else {
-            setText(""); // Display no text when not flipped
+            setText("");
         }
-        repaint();
     }
-    
-   
-	public boolean isMatch(FlipCard card1, FlipCard card2)
-	{
-		if (card1.cardValue == card2.cardValue)
-		{
-			return true;
-//		JOptionPane.showMessageDialog(FlipCard.this,"Two cards is match");
-		}
-		else {
-            setText(""); // Display no text when not flipped
-            return false;
-        }
-	}
+
+    public void setMatched(boolean isMatched) {
+        matched = isMatched;
+    }
 }

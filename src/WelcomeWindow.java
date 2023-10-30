@@ -12,7 +12,10 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.JOptionPane;
-
+/**
+ * This class create GUI for welcome window that allow 
+ * players to enter their name
+ */
 public class WelcomeWindow extends JFrame {
 
     private JPanel mainPanel;
@@ -46,17 +49,19 @@ public class WelcomeWindow extends JFrame {
         // display the window
         setVisible(true);
         
+        //add listener to the Enter button
         EnterButton.addActionListener(new ActionListener() {
           
 			public void actionPerformed(ActionEvent e) {
                 try {
-                    // Store the player's name from the text field
+                    // Store the first player's name from the text field
                     playerName = PlayerNameTextField.getText();
                     
-                    // Check if the playerName contains at least one number
+                    // Check if the playerName contains any number
                     if (ContainsNumber(playerName)) {
                         throw new ValidName("Player name must not have numbers.");
                     }
+                    //enter name of the second player
                     if (currentPlayer ==1)
                     {
                     	player1 = new Player(playerName);
@@ -64,6 +69,7 @@ public class WelcomeWindow extends JFrame {
                         PlayerName.setText("Player " + currentPlayer + " Name");
                         PlayerNameTextField.setText("");
                     }
+                    //dispose the current window and explore the player window
                     else if (currentPlayer == 2)
                     {
                     	player2 = new Player(playerName);
@@ -93,20 +99,21 @@ public class WelcomeWindow extends JFrame {
     // create Panel
     private void createPanel() {
         mainPanel = new JPanel();
-        
+        //create label welcome
         Welcome = new JLabel("Welcome to Memory Game");
+        //create label player name and set size
         PlayerName = new JLabel("Player " + currentPlayer + " Name");
         Font customFont = new Font("Serif", Font.PLAIN, 20);
         PlayerName.setFont(customFont);
         Welcome.setFont(customFont);        
-        
+        //create JTextFiels to enter name
         PlayerNameTextField = new JTextField("");
         PlayerNameTextField.setFont(customFont);
         PlayerNameTextField.setPreferredSize(new Dimension(200, 50));
-       
+        //create Enter button
         EnterButton = new JButton("Enter");
         EnterButton.setFont(customFont);
-        
+        //add buttons and labels to mainPanel
         mainPanel.add(Welcome);
         mainPanel.add(PlayerName);
         mainPanel.add(PlayerNameTextField);

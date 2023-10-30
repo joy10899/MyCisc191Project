@@ -1,119 +1,93 @@
 import java.awt.BorderLayout;
-import java.awt.Container;
-import java.awt.Font;
+import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-
+import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-//import javax.swing.SwingUtilities;
 
 public class GameWindow extends JFrame {
-	//This list is used to store all flip card that will be displayed on the cards.
-	 private ArrayList<FlipCard> Cards = new ArrayList<>();
-	// This list is used to store the numeric values that will be displayed on the cards
-	 private List<Integer> cardValues = new ArrayList<>();
-	 private FlipCard firstCard;
-	 private FlipCard card;
-	 
-	 public GameWindow() {
+    private ArrayList<FlipCard> cards = new ArrayList<>();
+    private List<Integer> cardValues = new ArrayList<>();
+    private FlipCard firstCard = null;
+    private FlipCard secondCard = null;
 
-	        // Calls the superclass constructor with the title "Memory Game".
-	        super("Memory Game");
+    public GameWindow() {
+        super("Memory Game");
+        final int WINDOW_WIDTH = 600;
+        final int WINDOW_HEIGHT = 400;
+        setSize(WINDOW_WIDTH, WINDOW_HEIGHT);
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-	        // the size of the window
-	        final int WINDOW_WIDTH = 600;
-	        final int WINDOW_HEIGHT = 400;
+        for (int i = 1; i <= 8; i++) {
+            cardValues.add(i);
+            cardValues.add(i);
+        }
+        Collections.shuffle(cardValues);
 
-	        // set the size
-	        setSize(WINDOW_WIDTH, WINDOW_HEIGHT);
+        for (int value : cardValues) {
+            FlipCard flipCard = new FlipCard(value);
+            cards.add(flipCard);
+        }
 
-	        // set the program to end when the window is closed
-	        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        JPanel cardPanel = new JPanel(new GridLayout(4, 4));
+        for (FlipCard card : cards) {
+            cardPanel.add(card);
+        }
 
-	        // Create a list of 1 to 8 numbers for 8 pairs
-	        for (int i = 1; i <= 8; i++) {
-	            cardValues.add(i);
-	            cardValues.add(i); 
-	     
-	        }
-	        Collections.shuffle(cardValues);
+        add(cardPanel, BorderLayout.CENTER);
+        setVisible(true);
 
-	        // Create the flip cards 
-	        for (int value : cardValues) {
-	            FlipCard flipCard = new FlipCard(value);
-	            // Adding flip card to the flipCards list
-	            Cards.add(flipCard);
-	        }
+        // Set up the action listener for the FlipCards
+        for (FlipCard card : cards) {
+            card.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    handleCardClick(card);
+                }
+            });
+        }
+    }
 
-	        // Create a JPanel to hold the cards and arrange them in a grid
-	        JPanel cardPanel = new JPanel(new GridLayout(4, 4)); // 4 rows and 4 columns for 16 cards
-	        for (FlipCard card : Cards) {
-	            cardPanel.add(card);
-	        }
+    private void handleCardClick(FlipCard clickedCard) {
+        // If the card is already flipped, ignore the click
+        if (clickedCard.isFlipped()) {
+            return;
+        }
 
-	        // Add the cardPanel to the center of the frame
-	        add(cardPanel, BorderLayout.CENTER);
+        if (firstCard == null) {
+            // First card is clicked
+            firstCard = clickedCard;
+            firstCard.flip();
+        } else if (secondCard == null) {
+            // Second card is clicked
+            secondCard = clickedCard;
+            secondCard.flip();
 
-	        // display the window
-	        setVisible(true);
-	        
-	        //ActionListener class
-	        class  cardClickListener implements ActionListener {
-	        	private FlipCard card;
-	        	private FlipCard firstCard = null;
-	        	private ArrayList<FlipCard> cards;
-	        	
-	        	public cardClickListener(FlipCard card, ArrayList<FlipCard> cards)
-	        	{
-	        		this.card = card;
-	        		this.cards = cards;
-	        	}
+            // Check for a match
+            if (firstCard.getValue() == secondCard.getValue()) {
+                // Cards match
+                firstCard.setMatched(true);
+                secondCard.setMatched(true);
+                JOptionPane.showMessageDialog(secondCard, "Two cards is match");
+            } else {
+                // Cards don't match, flip them back
+                firstCard.flip();
+                secondCard.flip();
+            }
 
-	        	@Override
-	        	public void actionPerformed(ActionEvent e)
-	        		{
-	        			if( firstCard == null)
-	        			{
-	        				firstCard = card;
-	        			}
-	        			else if (firstCard != card)
-	        			{
-	        				if (firstCard.getValue() == card.getValue())
-	        					{
-	        					JOptionPane.showMessageDialog(GameWindow.this,"Two cards is match");
-	        					firstCard.setEnabled(false);
-	        					card.setEnabled(false);
-	        					firstCard = null;
-	        					}
-	        				else {
-	        					firstCard = null;
-	        				}
-	                        
-	                    }
-	        	
-	        	
-	        	}
-	        	}
-	        	ActionListener cardClickListener = new cardClickListener(card, Cards);
-	        	for (FlipCard card : Cards) {
-	                card.addActionListener(cardClickListener);
-	            }
-	        	
-	        	}
-	 
-	        
-	      
+            // Reset firstCard and secondCard
+            firstCard = null;
+            secondCard = null;
+        }
+    }
 
-
-	 public static void main(String[] args) {
-	   //     SwingUtilities.invokeLater(() -> {
-	            new GameWindow();
-	      //  });
-	    }
-	}
+    public static void main(String[] args) {
+        new GameWindow();
+    }
+}
