@@ -4,11 +4,14 @@ import java.awt.Container;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+
 
 public class PlayerWindow extends JFrame {
 
@@ -18,8 +21,9 @@ public class PlayerWindow extends JFrame {
     private JLabel player2Label;
     private JLabel ReadyLabel;
     private JButton ReadyButton;
-    private static Player player1;
-    private static Player player2;
+    public static Player player1;
+    public static Player player2;
+    public static ArrayList<Player> players;
 
     public PlayerWindow(Player player1, Player player2) {
         // Call the superclass constructor and set the window title
@@ -35,6 +39,8 @@ public class PlayerWindow extends JFrame {
 
         // Create the main panel and components
         createPanel(player1, player2);
+        
+       
 
         // Make the window visible
         setVisible(true);
@@ -45,17 +51,43 @@ public class PlayerWindow extends JFrame {
 
             public void actionPerformed(ActionEvent e) {
             	 dispose();
+            	 List<Player> players = new ArrayList<>();
+                 players.add(player1);
+                 players.add(player2);
 
                  // Create and display the new GameWindow
-                 JFrame GameWindow = new GameWindow();
+                 JFrame GameWindow = new GameWindow(players);
                 GameWindow.setVisible(true);
           
      
             }
         });
+        
        
 
     }
+    
+//    public PlayerWindow(){
+//    	 // Add players to the ArrayList
+//        ArrayList<Player> players = new ArrayList<>();
+//        player1 = new Player("Player 1");
+//        player2 = new Player("Player 2");
+//        players.add(player1);
+//        players.add(player2);
+//    }
+//   
+//    public Player	 get(int currentPlayerIndex)
+//	{
+//    	Player currentPlayer = players.get(currentPlayerIndex);
+//    	return currentPlayer;
+//	}
+//    
+//    public void add(Player player)
+//    {
+//    	players.add(player);
+//    	
+//    }
+
 
     private void createPanel(Player player1, Player player2) {
         //customFont
@@ -93,16 +125,12 @@ public class PlayerWindow extends JFrame {
         // Add the PanelNorth and PanelSouth to the north and south of the content pane
         contentPane.add(PanelNorth, BorderLayout.NORTH);
         contentPane.add(PanelSouth, BorderLayout.SOUTH);
-
     }
-//    {
-//        ArrayList<Player> players = new ArrayList<>();
-//
-//        // Add players to the ArrayList
-//        Player player1 = new Player("Player 1");
-//        Player player2 = new Player("Player 2");
-//        players.add(player1);
-//        players.add(player2);
+//    public static String getName(int i){
+//    	return players.get(i).getName();
+//    }
+
+        
 //
 //        // Increment scores
 //        player1.incrementScore(); // Player 1's score +1
@@ -114,10 +142,23 @@ public class PlayerWindow extends JFrame {
 //        }
 //}
     
+//    public static int get(int currentPlayerIndex)
+//    {
+//    	return players[currentPlayerIndex];
+//    }
 
 
     public static void main(String[] args) {
         // Example usage: Create an instance of PlayerWindow with a player name
-        new PlayerWindow(player1, player2);
+
+    	new PlayerWindow(player1, player2);
+//    	PlayerWindow players = new PlayerWindow();
+//        players.add(player1);
+//        players.add(player2);
     }
+
+
+
+	
+
 }
