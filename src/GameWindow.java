@@ -19,13 +19,10 @@ public class GameWindow extends JFrame implements Runnable {
     private FlipCard secondCard = null;
     private JLabel score1Label;
     private JLabel score2Label;
-//    private JLabel name1;
-//    private JLabel name2;
-//    private JLabel score1;
-//    private JLabel score2;
     private int currentPlayerIndex = 0;
     private List<Player> players;
-
+    public static Player player1;
+    public static Player player2;
     public GameWindow(List<Player> players) {
         super("Memory Game");
         this.players = players;
@@ -56,12 +53,7 @@ public class GameWindow extends JFrame implements Runnable {
         score1Label = new JLabel(players.get(currentPlayerIndex).toString());
         currentPlayerIndex = 1;
         score2Label = new JLabel(players.get(currentPlayerIndex).toString());
-//        name1 = new JLabel(players.get(currentPlayerIndex).getName());
-//        score1 = new JLabel(Integer.toString(players.get(currentPlayerIndex).getScore()));
-//        currentPlayerIndex = 1;
-//        name2 = new JLabel(players.get(currentPlayerIndex).getName());
-//        score2 = new JLabel(Integer.toString(players.get(currentPlayerIndex).getScore()));
-//        scorePanel.add(name);
+        
         scorePanel.add(score1Label);
         scorePanel.add(score2Label);
 
@@ -69,8 +61,8 @@ public class GameWindow extends JFrame implements Runnable {
         add(scorePanel, BorderLayout.EAST);
         setVisible(true);
 
-        // Initialize player info
-//        updatePlayerInfo();
+        //reset index to the first player
+        currentPlayerIndex = 0;
 
         // Set up the action listener for the FlipCards
         for (FlipCard card : cards) {
@@ -81,18 +73,12 @@ public class GameWindow extends JFrame implements Runnable {
                 }
             });
         }
+        Thread gameThread = new Thread(this);
+        gameThread.start();
+        
+
     }
-
-//    public void updatePlayerInfo() {
-//    	currentPlayerIndex=0;
-//        Player currentPlayer = players.get(currentPlayerIndex);
-//        score1Label.setText(currentPlayer.toString());
-//        currentPlayerIndex=1;
-//        currentPlayer = players.get(currentPlayerIndex);
-//        score2Label.setText(currentPlayer.toString());
-//        score2Label.setText(Integer.toString(currentPlayer.getScore()));
-//    }
-
+    
     private void handleCardClick(FlipCard clickedCard) {
         // If the card is already flipped, ignore the click
         if (clickedCard.isFlipped()) {
@@ -113,11 +99,12 @@ public class GameWindow extends JFrame implements Runnable {
                 // Cards match
                 firstCard.setMatched(true);
                 secondCard.setMatched(true);
-                JOptionPane.showMessageDialog(secondCard, "Two cards match!");
-                players.get(0).incrementScore();
-                score1Label.setText(players.get(0).toString());
-                
-//                currentPlayerIndex = (currentPlayerIndex + 1) % players.size();
+                JOptionPane.showMessageDialog(rootPane, "Two cards match!");
+                players.get(currentPlayerIndex).incrementScore();
+                if (currentPlayerIndex ==0) {
+                score1Label.setText(players.get(currentPlayerIndex).toString());}
+                else if (currentPlayerIndex ==1) {
+                score2Label.setText(players.get(currentPlayerIndex).toString());}
             } else {
                 // Cards don't match, flip them back
                 firstCard.flip();
@@ -130,6 +117,34 @@ public class GameWindow extends JFrame implements Runnable {
             secondCard = null;
         }
     }
+//   
+    //let the window open for 10 seconds 
+    @Override 
+    public void run() {
+    	try {
+    		Thread.sleep(15000);
+    		//tell player to switch
+        	JOptionPane.showMessageDialog(firstCard, "Switch Player");
+        	//reset all cards
+        	for (FlipCard card : cards) {
+        		card.setText("");}
+        	//update player for scoring
+        	currentPlayerIndex = 1;
+             for (FlipCard card1 : cards) {
+                  card1.addActionListener(new ActionListener() {
+                      @Override
+                      public void actionPerformed(ActionEvent e) {
+                          handleCardClick(card1);
+                      }
+                  });
+              }
+    	}
+    	catch(InterruptedException e){
+    		e.printStackTrace();
+    	}
+    }
+
+
 
     public static void main(String[] args) {
         // Example usage: Create an instance of PlayerWindow with a player name
@@ -142,7 +157,8 @@ public class GameWindow extends JFrame implements Runnable {
 
         PlayerWindow playerWindow = new PlayerWindow(player1, player2);
         playerWindow.setVisible(true);
-
+    	
+    	 
         // After the players are added, create the GameWindow
         new GameWindow(players);
     }
