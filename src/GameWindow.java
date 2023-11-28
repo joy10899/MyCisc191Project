@@ -34,9 +34,10 @@ public class GameWindow extends JFrame implements Runnable
 		super("Memory Game");
 		this.players = players;
 
-		final int WINDOW_WIDTH = 600;
-		final int WINDOW_HEIGHT = 400;
-		setSize(WINDOW_WIDTH, WINDOW_HEIGHT);
+//		final int WINDOW_WIDTH = 600;
+//		final int WINDOW_HEIGHT = 400;
+//		setSize(WINDOW_WIDTH, WINDOW_HEIGHT);
+		setExtendedState(JFrame.MAXIMIZED_BOTH);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
 		for (int i = 1; i <= 8; i++)

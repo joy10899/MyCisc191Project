@@ -34,11 +34,12 @@ public class WelcomeWindow extends JFrame {
         super("Welcome");
 
         // a few constants for the size of the window
-        final int WINDOW_WIDTH = 600;
-        final int WINDOW_HEIGHT = 400;
-
-        // set the size
-        setSize(WINDOW_WIDTH, WINDOW_HEIGHT);
+//        final int WINDOW_WIDTH = 600;
+//        final int WINDOW_HEIGHT = 400;
+//
+//        // set the size
+//        setSize(WINDOW_WIDTH, WINDOW_HEIGHT);
+        setExtendedState(JFrame.MAXIMIZED_BOTH);
 
         // set the program to end when the window is closed
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
