@@ -42,7 +42,7 @@ public class NumberGameWindow extends JFrame
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
 		//add numbers for ArrayList NumberCard
-		for (int i = 1; i <= 4; i++)
+		for (int i = 1; i <= 5; i++)
 		{
 			numberCards.add(new NumberCard(i));
 			numberCards.add(new NumberCard(i));
@@ -50,7 +50,7 @@ public class NumberGameWindow extends JFrame
 		
 		Collections.shuffle(numberCards);
 
-		JPanel cardPanel = new JPanel(new GridLayout(2,4));
+		JPanel cardPanel = new JPanel(new GridLayout(2,5));
 		for (NumberCard card : numberCards)
 		{
 			card.setBackground(Color.cyan);
@@ -95,10 +95,15 @@ public class NumberGameWindow extends JFrame
 					card.flip();
 					card.doReaction();
 					handleNumberCardClick(card);
-//					card.doReaction();
+					if (cardAllFlip() == true) {
+//						dispose();
+						announceWinner();
+					}
 				}
 			});
 		}
+		
+		
 //		Thread gameThread = new Thread(this);
 //		gameThread.start();
 	}
@@ -113,19 +118,11 @@ public class NumberGameWindow extends JFrame
 		{
 			// First card is clicked
 			firstCard = clickedCard;
-//			firstCard.flip();
-//			firstCard.revalidate();
-//			clickedCard.doReaction();
-			System.out.println("First card selected");
 		}
 		else if (secondCard == null)
 		{
 			// Second card is clicked
 			secondCard = clickedCard;
-//			secondCard.flip();
-//			clickedCard.doReaction();
-			System.out.println("Second card selected");
-
 			// Check for a match
 			if (firstCard.getValue() == secondCard.getValue())
 			{
@@ -147,28 +144,26 @@ public class NumberGameWindow extends JFrame
 			}
 			else
 			{
-				// Cards don't match, flip them back
-//				try
-//				{
-//					Thread.sleep(15000);
-//				}
-//				catch (InterruptedException e)
-//				{
-//					// TODO Auto-generated catch block
-//					e.printStackTrace();
-//				}
 				JOptionPane.showMessageDialog(this, "Switch Player");
 				currentPlayerIndex = (currentPlayerIndex+1)%2;
+				// Cards don't match, flip them back
 				firstCard.flip();
 				secondCard.flip();
-				System.out.println("Flipping Card back over");
 			}
 
 			// Reset firstCard and secondCard
 			firstCard = null;
 			secondCard = null;
-//			switchPlayer();
 		}
+	}
+	
+	public boolean cardAllFlip() {
+	for (NumberCard card : numberCards) {
+		if (!card.isFlipped()) {
+			return false;
+		}
+	}
+	return true;
 	}
 	
 	public void announceWinner()
@@ -178,10 +173,6 @@ public class NumberGameWindow extends JFrame
 		currentPlayerIndex = (currentPlayerIndex + 1) % 2;
 		int secondScore = players.get(currentPlayerIndex).getScore();
 		JLabel winnerLabel = new JLabel();
-		winnerLabel.setBackground(Color.PINK);
-		winnerLabel.setForeground(Color.green);
-		winnerLabel.setFont(new Font("Serif", Font.PLAIN, 20));
-		winnerLabel.setPreferredSize(new Dimension(600,400));
 		if (secondScore > firstScore)
 		{
 			winnerLabel = new JLabel(
@@ -195,8 +186,17 @@ public class NumberGameWindow extends JFrame
 					" CONGRATS, " + players.get(currentPlayerIndex).getName()
 							+ " IS THE WINNER");
 		}
+		winnerLabel.setFont(new Font("Serif", Font.PLAIN, 30));
+		winnerLabel.setPreferredSize(new Dimension(800,600));
+		winnerLabel.setForeground(Color.gray);
+		winnerLabel.setOpaque(true);
+		winnerLabel.setBackground(Color.pink);
+		f.setSize(new Dimension(800,600));
+		f.setLayout(new FlowLayout(FlowLayout.CENTER));
+		f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		f.setLocationRelativeTo(null);
 		f.add(winnerLabel);
-		f.setVisible(true);
+		f.setVisible(true);	
 	}
 
 

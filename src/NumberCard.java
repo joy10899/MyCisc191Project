@@ -31,7 +31,6 @@ public class NumberCard extends FlipCard
 			//Wait for the sound to finish
 //			Thread.sleep(clip.getMicrosecondLength()/10000);
 			Thread.sleep(1000);
-			System.out.println(clip.getMicrosecondLength()/1000);
 			//Close the clip 
 			clip.close();
 		} catch ( LineUnavailableException | IOException | javax.sound.sampled.UnsupportedAudioFileException | InterruptedException e) {
