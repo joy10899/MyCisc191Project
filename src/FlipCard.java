@@ -4,6 +4,7 @@ import javax.swing.JButton;
 
 class FlipCard extends JButton {
     private int cardValue;
+    protected String cardValue2;
     private boolean flipped = false;
     private boolean matched = false;
 
@@ -12,9 +13,20 @@ class FlipCard extends JButton {
         setPreferredSize(new Dimension(100, 100));
         setText("");
     }
+    
+    public FlipCard(String cardValue2)
+  	{
+  		this.cardValue2 = cardValue2;
+  		setPreferredSize(new Dimension(100, 100));
+          setText("");
+  	}
 
     public int getValue() {
         return cardValue;
+    }
+    
+    public String getValue2() {
+        return cardValue2;
     }
 
     public boolean isFlipped() {
@@ -31,10 +43,18 @@ class FlipCard extends JButton {
             setText(String.valueOf(cardValue));
         } else {
             setText("");
+            revalidate();
+            repaint();
         }
     }
 
     public void setMatched(boolean isMatched) {
         matched = isMatched;
     }
+
+	public void doReaction()
+	{
+		System.out.println("do Reation");
+		
+	}
 }

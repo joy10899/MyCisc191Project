@@ -1,4 +1,5 @@
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
@@ -6,10 +7,14 @@ import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
+import java.io.IOException;
+import java.util.Scanner;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.JOptionPane;
 /**
@@ -19,8 +24,11 @@ import javax.swing.JOptionPane;
 public class WelcomeWindow extends JFrame {
 
     private JPanel mainPanel;
+    private JPanel PanelCenter;
     private JLabel PlayerName;
     private JLabel Welcome;
+    private JLabel instructions;
+    private JTextArea textArea;
     private JTextField PlayerNameTextField;
     private int currentPlayer = 1;
     private JButton EnterButton;
@@ -33,19 +41,21 @@ public class WelcomeWindow extends JFrame {
         // call superclass constructor and title the window
         super("Welcome");
 
-        // a few constants for the size of the window
-//        final int WINDOW_WIDTH = 600;
-//        final int WINDOW_HEIGHT = 400;
-//
-//        // set the size
-//        setSize(WINDOW_WIDTH, WINDOW_HEIGHT);
         setExtendedState(JFrame.MAXIMIZED_BOTH);
 
         // set the program to end when the window is closed
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
         // Make a JPanel and add it to the frame
-        createPanel();
+        try
+		{
+			createPanel();
+		}
+		catch (IOException e)
+		{
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 
         // display the window
         setVisible(true);
@@ -98,15 +108,18 @@ public class WelcomeWindow extends JFrame {
 
                 
     // create Panel
-    private void createPanel() {
+    private void createPanel() throws IOException {
         mainPanel = new JPanel();
+//        mainPanel.setLayout(new GridLayout(4,1));
+//        mainPanel.setSize(50, 800);
         //create label welcome
-        Welcome = new JLabel("Welcome to Memory Game");
+        Welcome = new JLabel("WELCOME TO MEMORY GAME");
         //create label player name and set size
         PlayerName = new JLabel("Player " + currentPlayer + " Name");
         Font customFont = new Font("Serif", Font.PLAIN, 20);
         PlayerName.setFont(customFont);
-        Welcome.setFont(customFont);        
+        Welcome.setFont(customFont); 
+        Welcome.setForeground(Color.red);
         //create JTextFiels to enter name
         PlayerNameTextField = new JTextField("");
         PlayerNameTextField.setFont(customFont);
@@ -119,18 +132,57 @@ public class WelcomeWindow extends JFrame {
         mainPanel.add(PlayerName);
         mainPanel.add(PlayerNameTextField);
         mainPanel.add(EnterButton);
+        //Create PanelCenter
+        PanelCenter = new JPanel();
+        instructions = new JLabel("Instructions");
+        instructions.setFont(customFont);
+        textArea = new JTextArea("",100,100);
+        textArea.setFont(customFont);
+        
+        PanelCenter.setLayout(new BorderLayout());
+        PanelCenter.add(instructions,BorderLayout.NORTH);
+        PanelCenter.add(textArea,BorderLayout.CENTER);
+        Scanner scanner = null;
+        try {
+        	//Obtain and store information of File name
+            File inFile = new File ("gameInstruction.txt");
+            //create scanner object connect to the input file
+            scanner = new Scanner(inFile);
+            StringBuffer str = new StringBuffer("");
+            //check if input File has next line
+            while (scanner.hasNextLine())
+            {
+                //store the current line to String line
+                String line = scanner.nextLine();
+                //append line to this character sequence
+                str.append(line+System.lineSeparator());
+            }
+            //set text to str
+            textArea.setText(str.toString());
+        }
+        catch(IOException e)
+        {
+        	throw e;
+        }
+        finally
+        {
+        	scanner.close();
+        }
+        
         
      // Create a content pane for the JFrame
         Container contentPane = getContentPane();
         
         // Use a FlowLayout with center alignment for the content pane
-        contentPane.setLayout(new GridLayout(0,3));
+        contentPane.setLayout(new BorderLayout());
         
         // Add the mainPanel to the content pane
-        contentPane.add(mainPanel);
+        contentPane.add(mainPanel,BorderLayout.NORTH);
+        contentPane.add(PanelCenter,BorderLayout.CENTER);
 
         // Add the mainPanel to the JFrame
-        add(mainPanel);
+//        add(mainPanel,BorderLayout.NORTH);
+//        add(PanelCenter,BorderLayout.SOUTH);
     }
 
     public static void main(String[] args) {

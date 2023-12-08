@@ -1,5 +1,0 @@
-The game display multiple cards (different types: number cards, animal cards) facedown
-When you click on a card, it would play a sound or an image according to the type of the card.
-If you find out 2 cards match, your score go up.
-Each player will have 15 seconds to play.
-Whoever get higher score will be the winner
