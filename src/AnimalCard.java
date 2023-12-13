@@ -1,11 +1,12 @@
 import java.awt.Color;
 import java.awt.Dimension;
-
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.Timer;
-
+/**
+ * A class create functions for Animal Card
+ */
 public class AnimalCard extends FlipCard
 {
 	private String animalvalue;
@@ -14,7 +15,11 @@ public class AnimalCard extends FlipCard
 	private JLabel l;
 	private boolean flipped = false;
 	private boolean hasReaction = false;
-
+	
+	/**
+	 * Constructor
+	 * @param cardValue2
+	 */
 	public AnimalCard(String cardValue2)
 	{
 		super(cardValue2);
@@ -22,6 +27,9 @@ public class AnimalCard extends FlipCard
 		setText("");
 	}
 
+	/**
+	 * Implement flip method to show the string 
+	 */
 	@Override
 	public void flip()
 	{
@@ -36,22 +44,21 @@ public class AnimalCard extends FlipCard
 		}
 	}
 
+	/**
+	 * Method to get value
+	 * @return cardValue2
+	 */
 	public String getValue2()
 	{
 		return cardValue2;
 	}
 
+	/**
+	 * Method to do animated icon reaction 
+	 */
 	@Override
 	public void doReaction()
 	{
-		// f = new JFrame();
-		// img = new ImageIcon("worm.gif");
-		// l = new JLabel("",img,JLabel.CENTER);
-		// f.setSize(new Dimension(600,400));
-		// f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		// f.setLocationRelativeTo(null);
-		// f.add(l);
-		// f.setVisible(true);
 		if (flipped)
 		{
 			img = new ImageIcon("worm.gif");

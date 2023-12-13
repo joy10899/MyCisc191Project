@@ -23,7 +23,7 @@ public class Player {
     public void incrementScore() {
         score++;
     }
-    
+    //method toString print out name and score
     @Override
     public String toString() {
         return name + " Score :"+score;

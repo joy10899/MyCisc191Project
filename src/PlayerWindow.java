@@ -22,7 +22,11 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
-
+/**
+ * This class create GUI for Player Window
+ * and let the players pick the game to play
+ * @author Joy
+ */
 public class PlayerWindow extends JFrame
 {
 
@@ -43,25 +47,29 @@ public class PlayerWindow extends JFrame
 
 		// set JFrame exit on close
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		
 		// Create the main panel and components
 		createPanel(player1, player2);
 		
-		// set the fullscreen size window
+		// maximize the window size
 		setExtendedState(JFrame.MAXIMIZED_BOTH);
 
-
+		//center the frame on the screen
 		setLocationRelativeTo(null);
 
 		// Make the window visible
 		setVisible(true);
 
-		// Add an ActionListener to the "Ready" button
+		// Add an ActionListener to the "Number Game" button
 		numberButton.addActionListener(new ActionListener()
 		{
 
 			public void actionPerformed(ActionEvent e)
 			{
+				//dispose the Player Window
 				dispose();
+				
+				//Initialize player lists for new game window
 				List<Player> players = new ArrayList<>();
 				players.add(player1);
 				players.add(player2);
@@ -72,13 +80,16 @@ public class PlayerWindow extends JFrame
 
 			}
 		});
-		
+		// Add an ActionListener to the "Animal Game" button
 		animalButton.addActionListener(new ActionListener()
 		{
 
 			public void actionPerformed(ActionEvent e)
 			{
+				//dispose the Player Window
 				dispose();
+				
+				//Initialize player lists for new game window
 				List<Player> players = new ArrayList<>();
 				players.add(player1);
 				players.add(player2);
@@ -91,15 +102,16 @@ public class PlayerWindow extends JFrame
 		});
 	}
 	
-		
-
+	/**
+	 * Create panel for labels and buttons
+	 * @param player1
+	 * @param player2
+	 */
 	private void createPanel(Player player1, Player player2)
 	{
 		// customFont
 		Font customFont = new Font("Serif", Font.PLAIN, 20);
-//
-//		// Create PanelNorth
-//		PanelNorth = new JPanel();
+
 		// Create player1 & player2 Label
 		player1Label = new JLabel("Player 1  " + player1.getName());
 		player1Label.setFont(customFont);
@@ -109,8 +121,7 @@ public class PlayerWindow extends JFrame
 		player2Label.setFont(customFont);
 		player2Label.setForeground(Color.BLUE);
 		player2Label.setPreferredSize(new Dimension(200,50));
-//		// Create PanelSouth
-//		PanelSouth = new JPanel();
+
 		// Create Ready Label
 		pickLabel = new JLabel("Pick the type of cards you want to play!");
 		pickLabel.setFont(customFont);
@@ -128,15 +139,18 @@ public class PlayerWindow extends JFrame
 		
 		// Add buttons to the panel with space between rows
 		GridBagConstraints gbc = new GridBagConstraints();
+		
+		// sets the grid x-position, y-position for the component to 0
 		gbc.gridx = 0;
 		gbc.gridy = 0;
+		
+		//set 50 pixels of padding at the top
 		gbc.insets = new Insets(50,0,0,0);
-		
 		mainPanel.add(player1Label, gbc);
-		
+		//increments the grid y-position (row) 
 		gbc.gridy++;
 		mainPanel.add(player2Label,gbc);
-		
+
 		gbc.gridy++;
 		mainPanel.add(pickLabel,gbc);
 		
@@ -150,14 +164,13 @@ public class PlayerWindow extends JFrame
 		Container contentPane = getContentPane();
 
 		// Use BorderLayout for the content pane
-//		contentPane.setLayout(new BorderLayout());
-
-		// Add the PanelNorth and PanelSouth to the north and south of the
-		// content pane
 		contentPane.add(mainPanel,BorderLayout.CENTER);
 
 	}
-
+	/**
+	 * Main method calling the GUI
+	 * @param args
+	 */
 	public static void main(String[] args)
 	{
 		// Example usage: Create an instance of PlayerWindow with a player name

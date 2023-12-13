@@ -1,5 +1,17 @@
-The game display multiple cards (different types: number cards, animal cards) facedown
-When you click on a card, it would play a sound or an image according to the type of the card.
+The game will have 2 players.
+
+Please enter the names of 2 players to get started.
+
+You can choose Animal Game or Number Game according to 
+your preference to the type of cards you like.
+
+Each game display multiple cards facedown.
+
+When you click on a card, it would play a sound or 
+an animation according to the type of the game.
+
 If you find out 2 cards match, your score go up.
-Each player will have 15 seconds to play.
-Whoever get higher score will be the winner
+
+Otherwise, you'll lose your turn and the game will switch player.
+
+Whoever get higher score will be the winner.

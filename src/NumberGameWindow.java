@@ -16,7 +16,9 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.Timer;
-
+/**
+ * This class create a GUI for Number Game Window 
+ */
 public class NumberGameWindow extends JFrame 
 {
 	private ArrayList<NumberCard> numberCards = new ArrayList<>();
@@ -30,15 +32,24 @@ public class NumberGameWindow extends JFrame
 	public static Player player1;
 	public static Player player2;
 	private JLabel timerLabel;
-	private Timer timer;
 	private int secondsRemaining = 15;
-
+	
+	/**
+	 * Constructor
+	 * @param players
+	 */
 	public NumberGameWindow(List<Player> players)
 	{
+		//call the superclass constructor and title the window
 		super("Memory Game");
+		
+		//passing variable value to constructor value
 		this.players = players;
 
+		//maximize the window size
 		setExtendedState(JFrame.MAXIMIZED_BOTH);
+	
+		//set the program to end when the window is closed
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
 		//add numbers for ArrayList NumberCard
@@ -48,8 +59,10 @@ public class NumberGameWindow extends JFrame
 			numberCards.add(new NumberCard(i));
 		}
 		
+		//shuffle the cards
 		Collections.shuffle(numberCards);
 
+		//create cardPanel and add layout
 		JPanel cardPanel = new JPanel(new GridLayout(2,5));
 		for (NumberCard card : numberCards)
 		{
@@ -57,30 +70,36 @@ public class NumberGameWindow extends JFrame
 			cardPanel.add(card);
 		}
 		
-
 		// Add score Panel
 		JPanel scorePanel = new JPanel(new FlowLayout());
-//		JPanel scorePanel = new JPanel(new BorderLayout());
+		
+		//Add score label of first player
 		score1Label = new JLabel(players.get(currentPlayerIndex).toString());
+		
+		//Add score label of second player
 		currentPlayerIndex = 1;
 		score2Label = new JLabel(players.get(currentPlayerIndex).toString());
+		
 		// Add timer label
 		timerLabel = new JLabel("Time: " + secondsRemaining + "s");
 		timerLabel.setForeground(Color.red);
 		scorePanel.add(timerLabel);
-		//Add Score label
+		
+		//Add labels to the panel
 		scorePanel.add(score1Label);
 		scorePanel.add(score2Label);
+		
 		//Add JLabel to the panel
 		JPanel panel = new JPanel(new BorderLayout());
 		panel.add(cardPanel);
 		panel.add(scorePanel, BorderLayout.NORTH);
 		add(panel);
 		setVisible(true);
+		
 		// reset index to the first player
 		currentPlayerIndex = 0;
 
-		// Set up the action listener for the FlipCards
+		// Set up the action listener for the NumberCards
 		for (NumberCard card : numberCards)
 		{
 			card.addActionListener(new ActionListener()
@@ -88,49 +107,55 @@ public class NumberGameWindow extends JFrame
 				@Override
 				public void actionPerformed(ActionEvent e)
 				{
+					// If the card is already flipped, ignore the click
 					if (card.isFlipped())
 					{
 						return;
 					}
+					
+					//flip card
 					card.flip();
+					
+					//play Sound reaction
 					card.doReaction();
+					
+					//handle card click
 					handleNumberCardClick(card);
+					
+					//if all cards are flipped, announce the winner
 					if (cardAllFlip() == true) {
-//						dispose();
 						announceWinner();
 					}
 				}
 			});
 		}
-		
-		
-//		Thread gameThread = new Thread(this);
-//		gameThread.start();
 	}
 	
-	
-	private void handleNumberCardClick(NumberCard clickedCard)
+	/**
+	 * Method handle card click
+	 * @param clickedCard
+	 */
+	public void handleNumberCardClick(NumberCard clickedCard)
 	{
-		// If the card is already flipped, ignore the click
-	
-//		clickedCard.flip();
+		// assign first clickedCard to firstCard 
 		if (firstCard == null)
 		{
-			// First card is clicked
 			firstCard = clickedCard;
 		}
+		
+		// assign second clickedCard to secondCard 
 		else if (secondCard == null)
 		{
-			// Second card is clicked
 			secondCard = clickedCard;
 			// Check for a match
 			if (firstCard.getValue() == secondCard.getValue())
 			{
-				// Cards match
+				// If Cards match, display JOptionPane and increase player score
 				firstCard.setMatched(true);
 				secondCard.setMatched(true);
 				JOptionPane.showMessageDialog(rootPane, "Two cards match!");
 				players.get(currentPlayerIndex).incrementScore();
+				// Check index of player and set label to incrementScore
 				if (currentPlayerIndex == 0)
 				{
 					score1Label.setText(
@@ -142,9 +167,11 @@ public class NumberGameWindow extends JFrame
 							players.get(currentPlayerIndex).toString());
 				}
 			}
+			// If the cards don't match, switch player
 			else
 			{
 				JOptionPane.showMessageDialog(this, "Switch Player");
+				//switch player index
 				currentPlayerIndex = (currentPlayerIndex+1)%2;
 				// Cards don't match, flip them back
 				firstCard.flip();
@@ -157,6 +184,10 @@ public class NumberGameWindow extends JFrame
 		}
 	}
 	
+	/**
+	 * Method to check if all cards flip
+	 * @return true/false
+	 */
 	public boolean cardAllFlip() {
 	for (NumberCard card : numberCards) {
 		if (!card.isFlipped()) {
@@ -166,13 +197,19 @@ public class NumberGameWindow extends JFrame
 	return true;
 	}
 	
+	/**
+	 * Method to create a GUI to announce the winner
+	 */
 	public void announceWinner()
 	{
 		JFrame f = new JFrame();
+		//get score of first player
 		int firstScore = players.get(currentPlayerIndex).getScore();
+		//get score of second player
 		currentPlayerIndex = (currentPlayerIndex + 1) % 2;
 		int secondScore = players.get(currentPlayerIndex).getScore();
 		JLabel winnerLabel = new JLabel();
+		//compare score and set label for player has higher score
 		if (secondScore > firstScore)
 		{
 			winnerLabel = new JLabel(
@@ -186,11 +223,14 @@ public class NumberGameWindow extends JFrame
 					" CONGRATS, " + players.get(currentPlayerIndex).getName()
 							+ " IS THE WINNER");
 		}
+		//set font and color for winnerLabel
 		winnerLabel.setFont(new Font("Serif", Font.PLAIN, 30));
 		winnerLabel.setPreferredSize(new Dimension(800,600));
 		winnerLabel.setForeground(Color.gray);
+		//set label Opaque for background color
 		winnerLabel.setOpaque(true);
 		winnerLabel.setBackground(Color.pink);
+		winnerLabel.setHorizontalAlignment(JLabel.CENTER);
 		f.setSize(new Dimension(800,600));
 		f.setLayout(new FlowLayout(FlowLayout.CENTER));
 		f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -200,45 +240,6 @@ public class NumberGameWindow extends JFrame
 	}
 
 
-//	@Override
-//	public void run()
-//	public void switchPlayer(){
-//	
-//		try
-//		{
-//			Thread.sleep(15000);
-//			// tell player to switch
-//			
-//			// reset all cards for the next player to play
-//			for (NumberCard card : numberCards)
-//			{
-//				card.setText("");
-//			}
-//			// update player index for scoring the next player
-////			currentPlayerIndex = 1;
-//			// Set up the action listener for the new set of FlipCards
-//			for (NumberCard card1 : numberCards)
-//			{
-//				card1.addActionListener(new ActionListener()
-//				{
-//					@Override
-//					public void actionPerformed(ActionEvent e)
-//					{
-//						handleNumberCardClick(card1);
-//					}
-//				});
-//			}
-//			//add time to play for second player
-////			Thread.sleep(15000);x
-//			//end game
-//			JOptionPane.showMessageDialog(this, "Game over");
-//			dispose();
-//		}
-//		catch (InterruptedException e)
-//		{
-//			e.printStackTrace();
-//		}
-//	}
 
 	public static void main(String[] args)
 	{
